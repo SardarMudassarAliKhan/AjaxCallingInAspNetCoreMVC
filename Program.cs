@@ -1,3 +1,6 @@
+using AjaxCallingInAspNetCoreMVC.Data;
+using Microsoft.EntityFrameworkCore;
+
 namespace AjaxCallingInAspNetCoreMVC
 {
     public class Program
@@ -5,6 +8,9 @@ namespace AjaxCallingInAspNetCoreMVC
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddDbContext<FleetManagementContext>(options =>
+            options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             // Add services to the container.
             builder.Services.AddRazorPages();
@@ -25,6 +31,10 @@ namespace AjaxCallingInAspNetCoreMVC
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.MapControllerRoute(
+            name: "default",
+            pattern: "{controller=Home}/{action=Index}/{id?}");
 
             app.MapRazorPages();
 
